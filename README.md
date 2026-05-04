@@ -1,53 +1,132 @@
-# Análisis econométrico y segmentación de países a partir del SDG Index
+# Factores estructurales del desempeño sostenible
 
-Este repositorio contiene el material asociado al Trabajo Fin de Grado titulado:
+Repositorio asociado al Trabajo Fin de Grado:
 
-**“Factores estructurales del desempeño sostenible: análisis econométrico y segmentación de países a partir del SDG Index”**
+**"Factores estructurales del desempeño sostenible: análisis econométrico y segmentación de países a partir del SDG Index"**
 
-El objetivo del proyecto es analizar qué factores económicos, institucionales, educativos, tecnológicos y comerciales se asocian con el desempeño sostenible de los países, medido a través del **SDG Index**. Para ello, el trabajo combina herramientas de econometría clásica con una técnica complementaria de aprendizaje no supervisado, **K-means**, con el fin de identificar perfiles estructurales diferenciados entre países.
+El proyecto estudia qué factores económicos, institucionales, educativos, tecnológicos y comerciales se asocian con el desempeño sostenible de los países, aproximado mediante el **SDG Index**. Para ello, combina análisis econométrico, visualización estadística y una fase complementaria de segmentación con **K-means**.
 
----
+## Resumen
 
-## 1. Descripción general del proyecto
+La investigación parte de una pregunta central: **qué rasgos estructurales ayudan a explicar por qué algunos países obtienen mejores resultados de sostenibilidad que otros**.
 
-El proyecto parte de una pregunta económica central:
+El análisis se organiza en tres bloques:
 
-> ¿Qué factores estructurales ayudan a explicar por qué unos países presentan mejores niveles de sostenibilidad que otros?
+1. Explicación del **nivel del SDG Index en 2021**.
+2. Estudio de la **variación del SDG Index entre 2021 y 2025**.
+3. Evaluación de la **persistencia del desempeño sostenible**, analizando hasta qué punto el nivel de 2025 depende del registrado en 2021.
 
-A partir de esta cuestión, el análisis se organiza en tres planos complementarios:
+Como complemento, se aplica un algoritmo de **clustering K-means** para identificar grupos de países con perfiles estructurales similares.
 
-1. **Nivel inicial de sostenibilidad**  
-   Se estudia qué variables estructurales ayudan a explicar el valor del **SDG Index en 2021**.
+## Metodología
 
-2. **Cambio reciente en sostenibilidad**  
-   Se analiza qué factores se asocian con la **variación del SDG Index entre 2021 y 2025**.
+El trabajo integra tres capas de análisis:
 
-3. **Persistencia del desempeño sostenible**  
-   Se evalúa hasta qué punto el valor del **SDG Index 2025** depende del nivel que cada país ya tenía en 2021.
+- **Análisis descriptivo**, para caracterizar la distribución del SDG Index y de las variables estructurales.
+- **Modelos de regresión OLS**, para estimar asociaciones entre el SDG Index y un conjunto de variables explicativas tipificadas.
+- **Clustering no supervisado**, para segmentar países según sus características estructurales y representar los resultados en un espacio bidimensional mediante **PCA**.
 
-Además, el trabajo incorpora una capa complementaria de segmentación mediante **clustering K-means**, con el objetivo de agrupar países según sus características estructurales.
+Las variables estructurales consideradas en el análisis incluyen:
 
----
+- renta per cápita en PPP;
+- eficacia del gobierno;
+- gasto en educación;
+- actividad innovadora aproximada por patentes;
+- gasto en investigación y desarrollo;
+- apertura comercial.
 
-## 2. Enfoque económico del análisis
+## Base de datos
 
-El trabajo parte de la idea de que la sostenibilidad no puede explicarse mediante una única variable. El desempeño sostenible de un país depende de una combinación de factores estructurales, entre ellos:
-
-- capacidad económica;
-- calidad institucional;
-- inversión educativa;
-- capacidad innovadora;
-- esfuerzo en investigación y desarrollo;
-- grado de apertura comercial;
-- trayectoria previa del país.
-
-Por este motivo, el análisis combina modelos econométricos con una aproximación descriptiva y de segmentación. La econometría permite estimar asociaciones parciales entre variables, mientras que el clustering ayuda a identificar grupos de países con perfiles estructurales semejantes.
-
----
-
-## 3. Base de datos
-
-La base de datos utilizada se encuentra en el archivo:
+La base de datos principal del proyecto se encuentra en:
 
 ```text
 0. Final Data SDG Index.xlsx
+```
+
+Los scripts utilizan específicamente la hoja:
+
+```text
+Modelo_final_tipificado
+```
+
+## Estructura del repositorio
+
+```text
+.
+|-- 0. Final Data SDG Index.xlsx
+|-- README.md
+|-- clustering.py
+`-- images.py
+```
+
+### Archivos principales
+
+- `images.py`: genera figuras descriptivas y gráficos asociados a los modelos econométricos estimados con OLS.
+- `clustering.py`: ejecuta la segmentación de países mediante K-means, proyecta los resultados con PCA y exporta las tablas de salida.
+- `0. Final Data SDG Index.xlsx`: base de datos utilizada por ambos scripts.
+
+## Requisitos
+
+El proyecto está desarrollado en Python y requiere, como mínimo, las siguientes librerías:
+
+- `pandas`
+- `numpy`
+- `matplotlib`
+- `statsmodels`
+- `scikit-learn`
+- `openpyxl`
+
+Instalación sugerida:
+
+```bash
+pip install pandas numpy matplotlib statsmodels scikit-learn openpyxl
+```
+
+## Ejecución
+
+### 1. Generación de figuras y resultados econométricos
+
+```bash
+python images.py
+```
+
+Este script:
+
+- carga la base de datos desde Excel;
+- genera histogramas, boxplots y gráficos de relación bivariada;
+- estima tres modelos OLS;
+- representa los coeficientes e intervalos de confianza;
+- guarda las figuras en la carpeta `figuras_tfg`.
+
+### 2. Segmentación de países con K-means
+
+```bash
+python clustering.py
+```
+
+Este script:
+
+- selecciona las variables estructurales tipificadas;
+- estima un modelo **K-means** con `n_clusters=4`;
+- proyecta los resultados con **PCA**;
+- genera una figura resumen del clustering;
+- exporta tablas con la asignación de países y el perfil medio de cada clúster.
+
+## Salidas generadas
+
+Tras la ejecución de los scripts, se generan salidas como las siguientes:
+
+- carpeta `figuras_tfg/` con las figuras del análisis descriptivo y econométrico;
+- `figura_clustering_pca.png`;
+- `resultados_clustering_kmeans.xlsx`;
+- `perfil_medio_clusters.xlsx`.
+
+## Alcance académico
+
+Este repositorio documenta el componente empírico de un trabajo académico orientado al estudio comparado del desempeño sostenible entre países. Su objetivo principal es facilitar la trazabilidad del análisis, la reproducibilidad de los scripts y la organización del material cuantitativo utilizado en el TFG.
+
+## Notas
+
+- Los scripts asumen que el archivo Excel se encuentra en la raíz del proyecto.
+- Los nombres de columnas y de hojas deben mantenerse sin cambios para garantizar la ejecución correcta.
+- El repositorio puede ampliarse en el futuro con notebooks, tablas de resultados o documentación metodológica adicional.
